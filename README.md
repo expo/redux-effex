@@ -6,7 +6,7 @@ it sets out to, I don't have most of those problems, and I don't want to
 force other developers working on my codebases to suddenly become
 experts with generators and the fairly large redux-saga API.
 
-# Setup
+# Example
 
 #### Store.js
 
@@ -73,6 +73,7 @@ import type { EffectParams } from 'redux-effex';
 
 import AppDataApi from 'AppDataApi';
 import Actions from 'Actions';
+import ActionTypes from 'ActionTypes';
 import LocalStorage from 'LocalStorage';
 
 export default async function openAppAsync({action, dispatch, getState}: EffectParams) {
@@ -155,8 +156,37 @@ export default async function signOutAsync({action, dispatch}: EffectParams) {
 }
 ```
 
-#### Naming
+## A contrived example of waiting for another action
+
+#### waitForAllStepsAsync.js
+
+```javascript
+/**
+ * @providesModule waitForAllStepsAsync
+ * @flow
+ */
+
+import type { EffectParams } from 'redux-effex';
+
+import ActionTypes from 'ActionsTypes'
+
+export default async function ({nextDispatchAsync}: EffectParams) {
+  let action1 = await nextDispatchAsync(ActionTypes.STEP_ONE);
+  console.log(`step one complete: ${action1.payload}`);
+  let action2 = await nextDispatchAsync(ActionTypes.STEP_TWO);
+  console.log(`step two complete: ${action2.payload}`);
+  let action3 = await nextDispatchAsync(ActionTypes.STEP_THREE);
+  console.log(`step three complete: ${action3.payload}`);
+  alert('success!');
+}
+```
+
+# Naming
 
 The suffix is ex instead of ects because effects is surely taken and I
 work on [Exponent](https://getexponent.com/), whose name begins with ex.
 Cool story.
+
+# License
+
+MIT
