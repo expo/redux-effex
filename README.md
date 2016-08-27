@@ -173,10 +173,13 @@ import ActionTypes from 'ActionsTypes'
 export default async function ({nextDispatchAsync}: EffectParams) {
   let action1 = await nextDispatchAsync(ActionTypes.STEP_ONE);
   console.log(`step one complete: ${action1.payload}`);
+
   let action2 = await nextDispatchAsync(ActionTypes.STEP_TWO);
   console.log(`step two complete: ${action2.payload}`);
+
   let action3 = await nextDispatchAsync(ActionTypes.STEP_THREE);
   console.log(`step three complete: ${action3.payload}`);
+
   alert('success!');
 }
 ```
