@@ -170,7 +170,7 @@ import type { EffectParams } from 'redux-effex';
 
 import ActionTypes from 'ActionsTypes'
 
-export default async function ({nextDispatchAsync}: EffectParams) {
+export default async function waitForAllStepsAsync({nextDispatchAsync}: EffectParams) {
   let action1 = await nextDispatchAsync(ActionTypes.STEP_ONE);
   console.log(`step one complete: ${action1.payload}`);
 
