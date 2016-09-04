@@ -1,4 +1,10 @@
+// @flow
 import _ from 'lodash';
+
+type ReduxStore = {
+  dispatch: Function,
+  getState: () => Object
+};
 
 export type EffectParams = {
   action: Object,
@@ -9,12 +15,18 @@ export type EffectParams = {
 
 export type EffectErrorHandlerParams = {
   action: Object,
+  dispatch: (action: any) => void,
+  getState: () => any,
+  nextDispatchAsync: (actionType: string) => Promise<Object>,
   error: Object,
 };
 
+export type EffectFunction = (params: EffectParams) => Promise<any>;
+
 export type EffectDefinition = {
   action: string,
-  effect: (params: any) => Promise<any>,
+  effect: EffectFunction,
+  error?: (params: EffectErrorHandlerParams) => any
 };
 
 export const effectsMiddleware = (effectsDefinitionArray: Array<EffectDefinition>) => {
@@ -55,7 +67,7 @@ export const effectsMiddleware = (effectsDefinitionArray: Array<EffectDefinition
     }
   };
 
-  return store => next => action => {
+  return (store: ReduxStore) => (next: Function) => (action: Object) => {
     let result = next(action);
 
     _.forEach(_effects[action.type], effect => {
