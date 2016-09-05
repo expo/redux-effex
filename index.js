@@ -1,5 +1,4 @@
 // @flow
-import _ from 'lodash';
 
 type ReduxStore = {
   dispatch: Function,
@@ -32,7 +31,7 @@ export type EffectDefinition = {
 export const effectsMiddleware = (effectsDefinitionArray: Array<EffectDefinition>) => {
   let _waiting = {};
 
-  const _effects = _.reduce(effectsDefinitionArray, (result, effectDefinition) => {
+  const _effects = effectsDefinitionArray.reduce((result, effectDefinition) => {
     let { action: actionType, effect, error } = effectDefinition;
     result[actionType] = result[actionType] || [];
     effect.__errorHandler = error;
@@ -69,16 +68,18 @@ export const effectsMiddleware = (effectsDefinitionArray: Array<EffectDefinition
 
   return (store: ReduxStore) => (next: Function) => (action: Object) => {
     let result = next(action);
+    let actionEffects = _effects[action.type];
 
-    _.forEach(_effects[action.type], effect => {
-      callEffect(effect, action, store)
-    });
+    if (actionEffects) {
+      actionEffects.forEach(effect => {
+        callEffect(effect, action, store);
+      });
+    }
 
     if (typeof _waiting[action.type] !== 'undefined') {
       _waiting[action.type].forEach(resolve => resolve(action));
       delete _waiting[action.type];
     }
-
-    return result
+    return result;
   }
 }
