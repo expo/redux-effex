@@ -1,4 +1,9 @@
-import _ from 'lodash';
+// @flow
+
+type ReduxStore = {
+  dispatch: Function,
+  getState: () => Object
+};
 
 export type EffectParams = {
   action: Object,
@@ -9,18 +14,24 @@ export type EffectParams = {
 
 export type EffectErrorHandlerParams = {
   action: Object,
+  dispatch: (action: any) => void,
+  getState: () => any,
+  nextDispatchAsync: (actionType: string) => Promise<Object>,
   error: Object,
 };
 
+export type EffectFunction = (params: EffectParams) => Promise<any>;
+
 export type EffectDefinition = {
   action: string,
-  effect: (params: any) => Promise<any>,
+  effect: EffectFunction,
+  error?: (params: EffectErrorHandlerParams) => any
 };
 
 export const effectsMiddleware = (effectsDefinitionArray: Array<EffectDefinition>) => {
   let _waiting = {};
 
-  const _effects = _.reduce(effectsDefinitionArray, (result, effectDefinition) => {
+  const _effects = effectsDefinitionArray.reduce((result, effectDefinition) => {
     let { action: actionType, effect, error } = effectDefinition;
     result[actionType] = result[actionType] || [];
     effect.__errorHandler = error;
@@ -55,18 +66,20 @@ export const effectsMiddleware = (effectsDefinitionArray: Array<EffectDefinition
     }
   };
 
-  return store => next => action => {
+  return (store: ReduxStore) => (next: Function) => (action: Object) => {
     let result = next(action);
+    let actionEffects = _effects[action.type];
 
-    _.forEach(_effects[action.type], effect => {
-      callEffect(effect, action, store)
-    });
+    if (actionEffects) {
+      actionEffects.forEach(effect => {
+        callEffect(effect, action, store);
+      });
+    }
 
     if (typeof _waiting[action.type] !== 'undefined') {
       _waiting[action.type].forEach(resolve => resolve(action));
       delete _waiting[action.type];
     }
-
-    return result
+    return result;
   }
 }
