@@ -1,6 +1,6 @@
 {
   "name": "redux-effex",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Spin off async functions to perform side effects",
   "main": "index.js",
   "scripts": {
