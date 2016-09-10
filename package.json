@@ -2,13 +2,36 @@
   "name": "redux-effex",
   "version": "1.0.2",
   "description": "Spin off async functions to perform side effects",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublish": "npm run build",
+    "build": "babel src -d lib",
+    "test": "flow && mocha --compilers js:babel-register -r babel-polyfill",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "author": "Brent Vatne <brentvatne@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "lodash": "^4.15.0"
+  "babel": {
+    "presets": [
+      "latest"
+    ],
+    "plugins": [
+      "transform-flow-comments",
+      "transform-object-rest-spread"
+    ],
+    "sourceMaps": "inline"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-plugin-transform-flow-comments": "^6.8.0",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-latest": "^6.14.0",
+    "babel-register": "^6.14.0",
+    "expect": "^1.20.2",
+    "flow-bin": "^0.32.0",
+    "mocha": "^3.0.2",
+    "redux": "^3.6.0",
+    "redux-mock-store": "^1.2.0"
   }
 }
