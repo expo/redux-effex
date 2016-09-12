@@ -27,3 +27,5 @@ export type EffectDefinition = {
   effect: EffectFunction,
   error?: (params: EffectErrorHandlerParams) => any
 };
+
+export function effectsMiddleware(effectsDefinitionArray: Array<EffectDefinition>):any {}
