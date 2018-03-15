@@ -187,7 +187,7 @@ export default async function waitForAllStepsAsync({nextDispatchAsync}: EffectPa
 # Naming
 
 The suffix is ex instead of ects because effects is surely taken and I
-work on [Exponent](https://getexponent.com/), whose name begins with ex.
+work on [Expo](https://expo.io/), whose name begins with ex.
 Cool story.
 
 # License
