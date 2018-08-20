@@ -12,7 +12,6 @@ experts with generators and the fairly large redux-saga API.
 
 ```javascript
 /**
- * @providesModule Store
  * @flow
  */
 
@@ -38,7 +37,6 @@ export default createStore(
 
 ```javascript
 /**
- * @providesModule Effects
  * @flow
  */
 
@@ -64,7 +62,6 @@ export default [
 
 ```javascript
 /**
- * @providesModule openAppAsync
  * @flow
  */
 
@@ -120,7 +117,6 @@ async function fetchAppDataAsync(url, dispatch) {
 
 ```javascript
 /**
- * @providesModule signInAsync
  * @flow
  */
 
@@ -141,7 +137,6 @@ export default async function signInAsync({action, dispatch}: EffectParams) {
 
 ```javascript
 /**
- * @providesModule signOutAsync
  * @flow
  */
 
@@ -162,7 +157,6 @@ export default async function signOutAsync({action, dispatch}: EffectParams) {
 
 ```javascript
 /**
- * @providesModule waitForAllStepsAsync
  * @flow
  */
 
